@@ -1,0 +1,4 @@
+document.head.appendChild(style);
+
+
+

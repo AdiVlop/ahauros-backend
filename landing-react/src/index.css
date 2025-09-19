@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Aeonik:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    font-family: 'Aeonik', sans-serif !important;
+    background: linear-gradient(to bottom, #000000, #1f2937, #1e3a8a) !important;
+    color: #ffffff !important;
+    overflow-x: hidden;
+    /* iOS Safari fixes */
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    /* Android Chrome fixes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  #root {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #000000, #1f2937, #1e3a8a) !important;
+  }
+}
+
+@layer components {
+  .app-logo {
+    height: 50px !important;
+    width: auto !important;
+    max-width: 150px !important;
+    object-fit: contain !important;
+  }
+  
+  /* Mobile optimizations for iOS and Android */
+  @media (max-width: 768px) {
+    .app-logo {
+      height: 40px !important;
+      max-width: 120px !important;
+    }
+    
+    /* Fix iOS Safari input zoom */
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+    
+    /* Better touch targets for mobile */
+    button, a {
+      min-height: 44px !important;
+      min-width: 44px !important;
+    }
+    
+    /* Prevent iOS bounce scrolling */
+    body {
+      position: relative !important;
+      overflow-x: hidden !important;
+      width: 100% !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+  }
+  
+  .navbar-module {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 50 !important;
+  }
+  
+  .navbar-backdrop {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+  }
+  
+  .navbar-menu {
+    display: flex !important;
+    gap: 1.5rem !important;
+    color: white !important;
+    font-weight: 500 !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+  }
+  
+  .navbar-link {
+    color: white !important;
+    text-decoration: none !important;
+    transition: color 0.3s ease !important;
+    white-space: nowrap !important;
+  }
+  
+  .navbar-link:hover {
+    color: #e0bd40 !important;
+  }
+  
+  /* Responsive design pentru navbar */
+  @media (max-width: 1024px) {
+    .navbar-menu {
+      gap: 1rem !important;
+      font-size: 0.9rem !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .navbar-menu {
+      gap: 0.75rem !important;
+      font-size: 0.85rem !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .navbar-menu {
+      gap: 0.5rem !important;
+      font-size: 0.8rem !important;
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+    }
+    
+    .navbar-link {
+      padding: 0.25rem 0.5rem !important;
+    }
+  }
+  
+  
+  .problem-card {
+    background-color: rgba(17, 24, 39, 0.8) !important; /* bg-gray-900/80 */
+    border-radius: 1.5rem !important; /* rounded-3xl */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; /* shadow-2xl */
+    padding: 1.5rem !important; /* p-6 pentru mobile */
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  @media (min-width: 768px) {
+    .problem-card {
+      padding: 2.5rem !important; /* p-10 pentru desktop */
+    }
+  }
+  
+  .problem-card:hover {
+    background-color: rgba(31, 41, 55, 0.9) !important; /* hover:bg-gray-800/90 */
+    transform: translateY(-8px) !important; /* hover:-translate-y-2 */
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.4) !important; /* hover:shadow-2xl */
+  }
+  
+  /* Special styling for pricing cards */
+  #pricing .problem-card {
+    background-color: rgba(255, 255, 255, 0.95) !important; /* bg-white/95 */
+    color: #111827 !important; /* text-gray-900 */
+    backdrop-filter: blur(15px) !important;
+  }
+  
+  #pricing .problem-card:hover {
+    background-color: rgba(255, 255, 255, 1) !important; /* hover:bg-white */
+    transform: translateY(-12px) !important; /* hover:-translate-y-3 */
+    box-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.3) !important; /* hover:shadow-2xl */
+  }
+  
+  #pricing .problem-title {
+    color: #111827 !important; /* text-gray-900 */
+  }
+  
+  #pricing .problem-description {
+    color: #6b7280 !important; /* text-gray-500 */
+  }
+  
+  .problem-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin-bottom: 0.75rem !important; /* mb-3 */
+  }
+  
+  .problem-title {
+    font-size: 1.5rem !important; /* text-2xl */
+    font-weight: 700 !important; /* font-bold */
+    text-align: center !important;
+  }
+  
+  .problem-description {
+    color: #d1d5db !important; /* text-gray-300 */
+    text-align: center !important;
+    font-size: 1.125rem !important; /* text-lg */
+  }
+  
+  .problems-grid-container {
+    max-width: 72rem !important; /* max-w-6xl */
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important; /* gap-8 */
+  }
+  
+  @media (min-width: 640px) {
+    .problems-grid-container {
+      grid-template-columns: 1fr 1fr !important; /* sm:grid-cols-2 */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .problems-grid-container {
+      grid-template-columns: 1fr 1fr 1fr !important; /* lg:grid-cols-3 */
+    }
+  }
+  
+  .features-grid-container {
+    max-width: 72rem !important; /* max-w-6xl */
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important; /* gap-8 */
+    text-align: center !important;
+  }
+  
+  @media (min-width: 640px) {
+    .features-grid-container {
+      grid-template-columns: 1fr 1fr !important; /* sm:grid-cols-2 */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .features-grid-container {
+      grid-template-columns: 1fr 1fr 1fr !important; /* lg:grid-cols-3 */
+    }
+  }
+  
+  .pricing-grid-container {
+    max-width: 80rem !important; /* max-w-5xl */
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important; /* gap-8 */
+    text-align: center !important;
+  }
+  
+  .pricing-card {
+    background-color: rgba(17, 24, 39, 0.8) !important; /* bg-gray-900/80 */
+    border-radius: 1.5rem !important; /* rounded-3xl */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; /* shadow-2xl */
+    padding: 1.5rem !important; /* p-6 pentru mobile */
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    color: white !important;
+  }
+  
+  @media (min-width: 768px) {
+    .pricing-card {
+      padding: 2rem !important; /* p-8 pentru desktop */
+    }
+  }
+  
+  .pricing-card:hover {
+    background-color: rgba(31, 41, 55, 0.9) !important; /* hover:bg-gray-800/90 */
+    transform: translateY(-8px) !important; /* hover:-translate-y-2 */
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.4) !important; /* hover:shadow-2xl */
+  }
+  
+  @media (min-width: 640px) {
+    .pricing-grid-container {
+      grid-template-columns: 1fr 1fr !important; /* sm:grid-cols-2 */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .pricing-grid-container {
+      grid-template-columns: 1fr 1fr 1fr !important; /* lg:grid-cols-3 */
+    }
+  }
+  
+  .hero-content-box {
+    background-color: rgba(17, 24, 39, 0.8) !important; /* bg-gray-900/80 */
+    border-radius: 1.5rem !important; /* rounded-3xl */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; /* shadow-2xl */
+    padding: 2rem !important; /* p-8 pentru mobile */
+    max-width: 48rem !important; /* max-w-3xl */
+    position: relative !important;
+    z-index: 10 !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  @media (min-width: 768px) {
+    .hero-content-box {
+      padding: 4rem !important; /* p-16 pentru desktop */
+    }
+  }
+  
+  .hero-section {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    height: 100vh !important;
+  }
+  
+  .contact-container {
+    /* Removed restrictive max-width to allow full width */
+  }
+  
+  .contact-form {
+    /* Removed restrictive styles to allow Tailwind classes to work */
+  }
+  
+  .login-container {
+    max-width: 28rem !important; /* max-w-md */
+    margin: 0 auto !important;
+  }
+  
+  .login-form {
+    background-color: #111827 !important; /* bg-gray-900 */
+    border-radius: 0.5rem !important; /* rounded-lg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* shadow-md */
+    padding: 2rem !important; /* p-8 */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important; /* space-y-6 */
+  }
+}

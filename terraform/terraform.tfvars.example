@@ -1,0 +1,53 @@
+# Ahauros Backend - Terraform Variables Example
+# Copy this file to terraform.tfvars and update the values
+
+# AWS Configuration
+aws_region  = "us-east-1"
+environment = "prod"
+
+# Domain Configuration
+domain_name = "ahauros.io"
+api_domain  = "api.ahauros.io"
+
+# Database Configuration
+db_username = "admin"
+db_password = "your-secure-password-here"
+db_name     = "ahauros"
+
+# Infrastructure Configuration
+redis_node_type     = "cache.t3.micro"
+rds_instance_class  = "db.t3.micro"
+lambda_timeout      = 30
+lambda_memory_size  = 512
+
+
+
+
+# AWS Configuration
+aws_region  = "us-east-1"
+environment = "prod"
+
+# Domain Configuration
+domain_name = "ahauros.io"
+api_domain  = "api.ahauros.io"
+
+# Database Configuration
+db_username = "admin"
+db_password = "your-secure-password-here"
+db_name     = "ahauros"
+
+# Infrastructure Configuration
+redis_node_type     = "cache.t3.micro"
+rds_instance_class  = "db.t3.micro"
+lambda_timeout      = 30
+lambda_memory_size  = 512
+
+
+
+
+
+
+
+
+
+

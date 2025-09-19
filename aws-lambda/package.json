@@ -1,0 +1,39 @@
+{
+  "name": "ahauros-backend-lambda",
+  "version": "1.0.0",
+  "description": "Ahauros Backend Lambda Function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1490.0"
+  },
+  "keywords": ["lambda", "api", "ahauros"],
+  "author": "Ahauros Team",
+  "license": "MIT"
+}
+
+
+  "version": "1.0.0",
+  "description": "Ahauros Backend Lambda Function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1490.0"
+  },
+  "keywords": ["lambda", "api", "ahauros"],
+  "author": "Ahauros Team",
+  "license": "MIT"
+}
+
+
+
+
+
+
+
+
+
