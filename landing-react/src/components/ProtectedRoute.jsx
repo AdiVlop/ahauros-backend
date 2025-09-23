@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/auth?mode=login" replace />;
+  // Deactivated login protection - allow direct access to dashboard
+  return children;
 }
 

@@ -1,0 +1,16 @@
+{
+  "Actions": [
+    {
+      "Type": "redirect",
+      "RedirectConfig": {
+        "Protocol": "HTTPS",
+        "Port": "443",
+        "Host": "dt9dafbtd6qiv.cloudfront.net",
+        "Path": "/#{path}",
+        "Query": "#{query}",
+        "StatusCode": "HTTP_301"
+      }
+    }
+  ]
+}
+

@@ -49,8 +49,22 @@ export default function LandingPage() {
             <a href="#pricing" className="hover:text-[#e0bd40]">{t("pricing_title")}</a>
             <a href="#about" className="hover:text-[#e0bd40]">{t("about_title")}</a>
             <a href="/contact" className="hover:text-[#e0bd40]">{t("contact_title")}</a>
-            <a href="/auth" className="hover:text-[#e0bd40]">{t("auth_login")}</a>
           </nav>
+          {/* Login Buttons */}
+          <div className="flex items-center space-x-3">
+            <a 
+              href="https://app.ahauros.io/login" 
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg"
+            >
+              User Login
+            </a>
+            <a 
+              href="https://admin.ahauros.io/health" 
+              className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg"
+            >
+              Admin API
+            </a>
+          </div>
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
             defaultValue={i18n.language}
@@ -79,7 +93,25 @@ export default function LandingPage() {
             <a href="#pricing" onClick={() => setMenuOpen(false)}>{t("pricing_title")}</a>
             <a href="#about" onClick={() => setMenuOpen(false)}>{t("about_title")}</a>
             <a href="/contact" onClick={() => setMenuOpen(false)}>{t("contact_title")}</a>
-            <a href="/auth" onClick={() => setMenuOpen(false)}>{t("auth_login")}</a>
+            
+            {/* Mobile Login Buttons */}
+            <div className="flex flex-col space-y-3 pt-4">
+              <a 
+                href="https://app.ahauros.io/login" 
+                onClick={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center"
+              >
+                User Login
+              </a>
+              <a 
+                href="https://admin.ahauros.io/health" 
+                onClick={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center"
+              >
+                Admin API
+              </a>
+            </div>
+            
             <div className="pt-4">
               <select
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -110,10 +142,10 @@ export default function LandingPage() {
             {t("hero_sub")}
           </p>
           <a
-            href="/auth?mode=signup"
+            href="https://app.ahauros.io/login"
             className="bg-[#e0bd40] text-black font-semibold px-8 py-4 rounded-xl shadow-lg text-lg hover:bg-yellow-400 transition whitespace-nowrap"
           >
-            {t("cta_trial")}
+            Start Now → User Dashboard
           </a>
         </div>
       </section>
@@ -218,8 +250,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €199 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
@@ -230,8 +262,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €699 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
@@ -242,8 +274,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €1499 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
