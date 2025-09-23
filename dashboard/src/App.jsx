@@ -18,6 +18,10 @@ function App() {
           
           {/* Protected routes */}
           <Route 
+            path="/dashboard" 
+            element={<Navigate to="/dashboard/overview" replace />} 
+          />
+          <Route 
             path="/dashboard/overview" 
             element={
               <ProtectedRoute requiredRole="user">
