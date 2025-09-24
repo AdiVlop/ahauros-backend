@@ -35,8 +35,8 @@ export default function Auth() {
   useEffect(() => {
     if (session && profile && !profileLoading) {
       if (profile.role === "admin") {
-        // Redirect to admin dashboard on current port
-        window.location.href = "http://localhost:3002/admin-unified";
+        // Redirect to admin dashboard
+        window.location.href = "/admin-unified";
       } else {
         // Redirect to advanced dashboard with all functionalities
         window.location.href = "http://localhost:3003/dashboard";
