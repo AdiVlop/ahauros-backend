@@ -91,9 +91,17 @@ export default function LandingPage() {
         </div>
         {/* Mobile menu button */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 -mr-2"
+            aria-label="Toggle mobile menu"
+          >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              {menuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
@@ -102,39 +110,44 @@ export default function LandingPage() {
           <div 
             className="fixed inset-0 bg-black/50 z-40 md:hidden"
             onClick={() => setMenuOpen(false)}
+            onTouchEnd={() => setMenuOpen(false)}
           />
         )}
         {/* Mobile menu items */}
         {menuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-black/90 flex flex-col items-center space-y-4 py-6 md:hidden z-50 animate-in slide-in-from-top-2 duration-300">
+          <div className="absolute top-16 left-0 w-full bg-black/95 backdrop-blur-sm flex flex-col items-center space-y-4 py-6 md:hidden z-50 animate-in slide-in-from-top-2 duration-300">
             {/* Close button */}
             <button 
               onClick={() => setMenuOpen(false)}
-              className="absolute top-4 right-4 text-white hover:text-[#e0bd40] transition-colors"
+              onTouchEnd={() => setMenuOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-[#e0bd40] transition-colors p-2 -mr-2"
+              aria-label="Close mobile menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <a href="#problems" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("problems_title")}</a>
-            <a href="#features" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("features_title")}</a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("pricing_title")}</a>
-            <a href="#about" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("about_title")}</a>
-            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("contact_title")}</a>
+            <a href="#problems" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("problems_title")}</a>
+            <a href="#features" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("features_title")}</a>
+            <a href="#pricing" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("pricing_title")}</a>
+            <a href="#about" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("about_title")}</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("contact_title")}</a>
             
             {/* Mobile Login Buttons */}
             <div className="flex flex-col space-y-3 pt-4">
               <a 
                 href="https://app.ahauros.io/login" 
                 onClick={() => setMenuOpen(false)}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center"
+                onTouchEnd={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center active:scale-95"
               >
                 User Login
               </a>
               <a 
                 href="https://admin.ahauros.io/health" 
                 onClick={() => setMenuOpen(false)}
-                className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center"
+                onTouchEnd={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center active:scale-95"
               >
                 Admin API
               </a>
