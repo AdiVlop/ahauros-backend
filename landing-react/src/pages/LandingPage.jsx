@@ -303,19 +303,19 @@ export default function LandingPage() {
             <div>
               <h3 className="text-base md:text-lg font-semibold mb-4 text-[#e0bd40]">{t("quick_links")}</h3>
               <ul className="space-y-2">
-                <li><a href="#problems" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("problems")}</a></li>
-                <li><a href="#features" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("features")}</a></li>
-                <li><a href="#pricing" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("pricing_nav")}</a></li>
-                <li><a href="#about" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("about")}</a></li>
-                <li><a href="/contact" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("contact")}</a></li>
+                <li><a href="#problems" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("problems")}</a></li>
+                <li><a href="#features" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("features")}</a></li>
+                <li><a href="#pricing" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("pricing_nav")}</a></li>
+                <li><a href="#about" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("about")}</a></li>
+                <li><a href="/contact" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("contact")}</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-base md:text-lg font-semibold mb-4 text-[#e0bd40]">{t("legal")}</h3>
               <ul className="space-y-2">
-                <li><a href="/terms" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("terms_conditions")}</a></li>
-                <li><a href="/privacy" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("privacy_policy")}</a></li>
-                <li><a href="/gdpr" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("gdpr")}</a></li>
+                <li><a href="/terms" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("terms_conditions")}</a></li>
+                <li><a href="/privacy" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("privacy_policy")}</a></li>
+                <li><a href="/gdpr" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("gdpr")}</a></li>
               </ul>
             </div>
           </div>
