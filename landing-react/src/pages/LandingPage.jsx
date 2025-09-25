@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import enTranslations from '../locales/en.json';
@@ -23,6 +23,18 @@ import heroEnterprise from '@/assets/images/hero-enterprise.png';
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -85,14 +97,30 @@ export default function LandingPage() {
             </svg>
           </button>
         </div>
+        {/* Mobile menu overlay */}
+        {menuOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
         {/* Mobile menu items */}
         {menuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-black/90 flex flex-col items-center space-y-4 py-6 md:hidden">
-            <a href="#problems" onClick={() => setMenuOpen(false)}>{t("problems_title")}</a>
-            <a href="#features" onClick={() => setMenuOpen(false)}>{t("features_title")}</a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)}>{t("pricing_title")}</a>
-            <a href="#about" onClick={() => setMenuOpen(false)}>{t("about_title")}</a>
-            <a href="/contact" onClick={() => setMenuOpen(false)}>{t("contact_title")}</a>
+          <div className="absolute top-16 left-0 w-full bg-black/90 flex flex-col items-center space-y-4 py-6 md:hidden z-50 animate-in slide-in-from-top-2 duration-300">
+            {/* Close button */}
+            <button 
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-[#e0bd40] transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <a href="#problems" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("problems_title")}</a>
+            <a href="#features" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("features_title")}</a>
+            <a href="#pricing" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("pricing_title")}</a>
+            <a href="#about" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("about_title")}</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors">{t("contact_title")}</a>
             
             {/* Mobile Login Buttons */}
             <div className="flex flex-col space-y-3 pt-4">
