@@ -1,3 +1,8 @@
+# Ahauros Landing
+
+![Deploy Status](https://github.com/AdiVlop/ahauros-backend/actions/workflows/deploy.yml/badge.svg)
+
+
 # 🚀 Ahauros Backend
 
 Backend infrastructure pentru sistemul AI Ahauros, construit cu microservicii și tehnologii moderne.
