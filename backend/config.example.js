@@ -17,6 +17,9 @@ export const config = {
   // Server Port
   PORT: 5000,
   
+  // OpenAI API Key for Andreea GPT
+  OPENAI_API_KEY: "your-openai-api-key-here",
+  
   // Environment
   NODE_ENV: "development"
 };
@@ -26,4 +29,5 @@ export const config = {
 // 2. Copy the values above into the .env file
 // 3. Update with your actual MongoDB URI, email credentials, etc.
 // 4. Make sure to use Gmail App Password for EMAIL_PASS
+// 5. Get your OpenAI API key from https://platform.openai.com/api-keys
 
