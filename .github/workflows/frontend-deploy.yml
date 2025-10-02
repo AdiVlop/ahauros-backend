@@ -1,0 +1,45 @@
+name: Build and Deploy Ahauros Frontend
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'landing-react/**' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'landing-react/**' ]
+
+jobs:
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: landing-react/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./landing-react
+      run: npm ci
+      
+    - name: Build frontend
+      working-directory: ./landing-react
+      env:
+        VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
+      run: npm run build
+      
+    - name: Deploy to S3
+      if: github.ref == 'refs/heads/main'
+      working-directory: ./landing-react
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      run: |
+        aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
