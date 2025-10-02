@@ -83,7 +83,7 @@ app.get("/supplier-optimizer/stock-suppliers", (req, res) => {
 // =================== Andreea GPT API ===================
 app.post("/andreea/gpt", async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const { prompt, language = "English" } = req.body;
 
     // Validare prompt
     if (!prompt) {
@@ -100,7 +100,16 @@ app.post("/andreea/gpt", async (req, res) => {
       "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          {
+            role: "system",
+            content: `You are Andreea, the Ahauros AI mentor. Always reply strictly in ${language}, regardless of the input language.`
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
         max_tokens: 1000,
         temperature: 0.7
       },
