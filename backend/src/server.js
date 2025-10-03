@@ -8,6 +8,7 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import authRoutes from "./routes/auth.js";
 import adminRoutes from "./routes/admin.js";
 import andreeaRoutes from "./routes/andreea.js";
+import { logCORSError, logInfo } from "./utils/logger.js";
 const app = express();
 
 // ✅ configurăm CORS global
@@ -23,6 +24,7 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      logCORSError(origin, req.method, req.path);
       callback(new Error("CORS blocked: " + origin));
     }
   },
@@ -196,5 +198,9 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  logInfo(`🚀 Server running on port ${PORT}`, {
+    port: PORT,
+    environment: process.env.NODE_ENV || 'development',
+    openaiConfigured: !!process.env.OPENAI_API_KEY
+  });
 });

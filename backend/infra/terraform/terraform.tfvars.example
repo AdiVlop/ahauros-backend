@@ -1,0 +1,39 @@
+# ============================
+# Terraform Variables Example
+# ============================
+
+# AWS Configuration
+aws_region = "us-east-1"
+aws_profile = "default"
+
+# Slack Configuration
+slack_webhook_url = "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+
+# Email Configuration
+admin_email = "admin@ahauros.io"
+backup_email = "adrian@payai.ro"
+
+# CloudWatch Configuration
+log_retention_days = 14
+alarm_threshold_errors = 5
+alarm_threshold_timeouts = 3
+
+# ECS Configuration
+ecs_cluster_name = "ahauros-cluster"
+ecs_service_name = "admin-backend"
+ecs_cpu = "256"
+ecs_memory = "512"
+
+# Environment
+environment = "production"
+project_name = "Ahauros"
+service_name = "AdminBackend"
+
+# Tags
+tags = {
+  Project     = "Ahauros"
+  Service     = "AdminBackend"
+  Environment = "production"
+  Owner       = "adrian@payai.ro"
+  CostCenter  = "Engineering"
+}
