@@ -346,3 +346,4 @@ terraform output dns_records_for_squarespace
 ## 🆘 Suport
 
 Pentru întrebări sau probleme, deschide un issue în repository-ul GitHub.# Trigger deployment
+# Test ECR permissions
