@@ -112,7 +112,7 @@ app.post("/andreea/gpt", async (req, res) => {
             content: prompt
           }
         ],
-        max_tokens: 1000,
+        max_tokens: 500,
         temperature: 0.7
       },
       {
