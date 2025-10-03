@@ -9,11 +9,11 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 
-// ✅ configurăm CORS corect
+// ✅ configurăm CORS global
 const allowedOrigins = [
   "https://app.ahauros.io",
   "https://admin.ahauros.io",
-  "http://localhost:3002", // test local
+  "http://localhost:3002",
   "http://localhost:3003"
 ];
 
@@ -27,7 +27,7 @@ app.use(cors({
   },
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "x-dashboard-role"],
-  credentials: true
+  credentials: true,
 }));
 
 app.use(bodyParser.json());
@@ -124,7 +124,7 @@ app.use(
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ health check
+// health
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 // Admin routes info endpoint
@@ -201,10 +201,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Something went wrong!" });
 });
 
-// ✅ PORT din ENV
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📧 Email service: ${process.env.SMTP_HOST ? "Configured" : "Not configured"}`);
-  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || "Not set"}`);
 });
