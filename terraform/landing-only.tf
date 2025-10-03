@@ -113,7 +113,7 @@ resource "aws_cloudfront_distribution" "landing" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  # aliases             = ["ahauros.io", "www.ahauros.io"]  # Disabled until SSL certificate is ready
+  aliases             = ["ahauros.io"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -163,7 +163,9 @@ resource "aws_cloudfront_distribution" "landing" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:344707020061:certificate/fa414d7a-f18e-4b47-9582-79523ef81efa"
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   custom_error_response {
@@ -182,6 +184,7 @@ resource "aws_cloudfront_distribution" "landing" {
     Name = "ahauros-landing-distribution"
   }
 }
+
 
 # Outputs
 output "cloudfront_domain_name" {
@@ -208,6 +211,7 @@ output "route53_name_servers" {
   description = "Route53 name servers"
   value       = aws_route53_zone.main.name_servers
 }
+
 
 
 # Route53 Hosted Zone for ahauros.io

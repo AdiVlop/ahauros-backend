@@ -130,5 +130,9 @@
   "check_email_reset": "Verifică-ți emailul pentru instrucțiunile de resetare.",
   "password_updated": "Parola actualizată. Se redirecționează...",
   "error_sending_reset": "Eroare la trimiterea emailului de resetare.",
-  "reset_failed": "Resetarea a eșuat."
+  "reset_failed": "Resetarea a eșuat.",
+  
+  "redirecting": "Se redirecționează...",
+  "redirecting_to_login": "Te ducem la pagina de login...",
+  "click_here_if_not_redirected": "Apasă aici dacă nu ești redirecționat automat"
 }

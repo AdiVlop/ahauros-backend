@@ -136,5 +136,9 @@
   "check_email_reset": "Check your email for reset instructions.",
   "password_updated": "Password updated. Redirecting...",
   "error_sending_reset": "Error sending reset email.",
-  "reset_failed": "Reset failed."
+  "reset_failed": "Reset failed.",
+  
+  "redirecting": "Redirecting...",
+  "redirecting_to_login": "Taking you to the login page...",
+  "click_here_if_not_redirected": "Click here if you're not redirected automatically"
 }

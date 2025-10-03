@@ -9,7 +9,9 @@ import Privacy from "./pages/Privacy";
 import Gdpr from "./pages/Gdpr";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./components/DashboardLayout";
+import AdminDashboardLayout from "./components/AdminDashboardLayout";
 import AndreeaOrchestrator from "./components/AndreeaOrchestrator";
+import AIOrchestration from "./pages/admin/AIOrchestration";
 import { dashboardRoutes } from "./config/routesConfig";
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<ContactPage />} />
         
+        {/* User Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -49,6 +52,19 @@ function App() {
             }
             return <Route key={path} path={relativePath} element={<Element />} />;
           })}
+        </Route>
+
+        {/* Admin Dashboard - SEPARAT */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AIOrchestration />} />
+          <Route path="ai" element={<AIOrchestration />} />
         </Route>
 
         <Route path="/terms" element={<Terms />} />

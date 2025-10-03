@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, LineChart, ShieldAlert, Brain, Plug, Package, BarChart3, UserSquare2, CreditCard, Settings, Book } from "lucide-react";
+import { LayoutDashboard, Users, LineChart, ShieldAlert, Brain, Plug, Package, BarChart3, UserSquare2, CreditCard, Settings, Book, Crown } from "lucide-react";
 
 export const dashboardRoutes = [
   { name: "Overview", path: "/dashboard/overview", icon: LayoutDashboard },
@@ -13,4 +13,9 @@ export const dashboardRoutes = [
   { name: "Billing", path: "/dashboard/billing", icon: CreditCard },
   { name: "Settings", path: "/dashboard/settings", icon: Settings },
   { name: "Instructions", path: "/dashboard/instructions", icon: Book },
+];
+
+// Admin routes (only visible to admin users)
+export const adminRoutes = [
+  { name: "AI Orchestration", path: "/dashboard/admin/ai", icon: Crown, adminOnly: true },
 ];

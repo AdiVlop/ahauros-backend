@@ -79,6 +79,30 @@ export default function DashboardLayout() {
                 </li>
                 );
               })}
+              
+              {/* Admin Section */}
+              <div className="border-t border-gray-700 my-4"></div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 px-4">
+                Admin
+              </div>
+              {adminRoutes.map(({ name, path, icon }) => {
+                const Icon = icon;
+                return (
+                <li key={path}>
+                  <button
+                    onClick={() => navigate(path)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                      isActive(path)
+                        ? 'bg-[#e0bd40] text-black font-semibold'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{name}</span>
+                  </button>
+                </li>
+                );
+              })}
             </ul>
           </nav>
         </aside>
