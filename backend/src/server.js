@@ -36,14 +36,16 @@ app.get("/health", (req, res) => {
 
 // =================== Profit API ===================
 app.get("/profit/overview", (req, res) => {
-  res.json([
-    { month: "Jan", profit: 2400 },
-    { month: "Feb", profit: 3100 },
-    { month: "Mar", profit: 5200 },
-    { month: "Apr", profit: 4800 },
-    { month: "May", profit: 6100 },
-    { month: "Jun", profit: 7200 }
-  ]);
+  res.json({
+    netProfit: 12450,
+    adsSpend: 5200,
+    roi: 139,
+    predictions: 15800,
+    totalUsers: 1247,
+    activeCampaigns: 23,
+    fraudDetected: 12,
+    aiRecommendations: 45
+  });
 });
 
 app.get("/profit/profit-ads", (req, res) => {
