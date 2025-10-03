@@ -1,0 +1,62 @@
+name: Deploy Ahauros Backend
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        
+      - name: Build Docker image
+        run: |
+          docker build -t ahauros-backend .
+          echo "✅ Docker image built successfully"
+          
+      - name: Tag Docker image
+        run: |
+          docker tag ahauros-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahauros-backend:latest
+          docker tag ahauros-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahauros-backend:${{ github.sha }}
+          echo "✅ Docker image tagged successfully"
+          
+      - name: Push Docker image to ECR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahauros-backend:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahauros-backend:${{ github.sha }}
+          echo "✅ Docker image pushed to ECR successfully"
+          
+      - name: Deploy to AWS ECS
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws ecs update-service \
+            --cluster ahauros-backend-cluster \
+            --service ahauros-backend-service \
+            --force-new-deployment
+          echo "✅ ECS service updated successfully"
+          
+      - name: Deployment Summary
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "🚀 Backend deployment completed successfully!"
+          echo "🐳 Docker Image: ahauros-backend"
+          echo "📦 ECR Repository: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahauros-backend"
+          echo "🔗 API URL: https://api.ahauros.io"
+          echo "🤖 Andreea GPT: Connected with OpenAI API"

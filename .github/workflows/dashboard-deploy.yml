@@ -1,0 +1,66 @@
+name: Deploy Ahauros Dashboard
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: Run ESLint
+        run: npm run lint
+        
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_PROFIT_AI_URL: ${{ secrets.VITE_PROFIT_AI_URL }}
+          VITE_SUPPLIER_OPTIMIZER_URL: ${{ secrets.VITE_SUPPLIER_OPTIMIZER_URL }}
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Deploy to S3
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws s3 sync dist/ s3://ahauros-dashboard-bucket --delete
+          echo "✅ Deployed to S3 bucket: ahauros-dashboard-bucket"
+          
+      - name: Invalidate CloudFront
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+          echo "✅ CloudFront cache invalidated for app.ahauros.io"
+          
+      - name: Deployment Summary
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "🚀 Dashboard deployment completed successfully!"
+          echo "📦 S3 Bucket: ahauros-dashboard-bucket"
+          echo "🌐 CloudFront Distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+          echo "🔗 Dashboard URL: https://app.ahauros.io"
+          echo "🤖 Andreea GPT: Connected with OpenAI API"

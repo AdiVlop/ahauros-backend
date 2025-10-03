@@ -1,0 +1,44 @@
+name: Deploy Ahauros Landing Page
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  deploy-landing:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Deploy to S3
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws s3 sync ./dist s3://ahauros-frontend-bucket --delete
+          echo "✅ Deployed to S3 bucket: ahauros-frontend-bucket"
+          
+      - name: Invalidate CloudFront
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+          echo "✅ CloudFront cache invalidated for ahauros.io"
+          
+      - name: Deployment Summary
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "🚀 Landing page deployment completed successfully!"
+          echo "📦 S3 Bucket: ahauros-frontend-bucket"
+          echo "🌐 CloudFront Distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+          echo "🔗 Landing URL: https://ahauros.io"
