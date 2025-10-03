@@ -1,0 +1,31 @@
+{
+  "scanDate": "2025-10-03T07:31:47.074Z",
+  "totalRepos": 6,
+  "ahaurosRepos": 3,
+  "repositories": [
+    {
+      "name": "ahauros-dashboard",
+      "owner": "AdiVlop",
+      "fullName": "AdiVlop/ahauros-dashboard",
+      "isPrivate": true,
+      "description": "dashboard user ",
+      "transferCommand": "gh repo transfer AdiVlop/ahauros-dashboard --organization Ahauros"
+    },
+    {
+      "name": "ahauros-backend",
+      "owner": "AdiVlop",
+      "fullName": "AdiVlop/ahauros-backend",
+      "isPrivate": false,
+      "description": "",
+      "transferCommand": "gh repo transfer AdiVlop/ahauros-backend --organization Ahauros"
+    },
+    {
+      "name": "ahauros-landing",
+      "owner": "AdiVlop",
+      "fullName": "AdiVlop/ahauros-landing",
+      "isPrivate": true,
+      "description": "ahauros.io",
+      "transferCommand": "gh repo transfer AdiVlop/ahauros-landing --organization Ahauros"
+    }
+  ]
+}
