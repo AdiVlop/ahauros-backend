@@ -1,0 +1,8 @@
+{
+  "projectType": "backend",
+  "description": "Ahauros backend: AWS infra + Lambda + Terraform + Docker",
+  "rules": [
+    "Nu modifica frontend aici",
+    "Doar fișiere de infra, Lambda și backend logic"
+  ]
+}

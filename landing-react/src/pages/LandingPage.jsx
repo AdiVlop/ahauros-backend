@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import enTranslations from '../locales/en.json';
@@ -23,6 +23,18 @@ import heroEnterprise from '@/assets/images/hero-enterprise.png';
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -49,8 +61,22 @@ export default function LandingPage() {
             <a href="#pricing" className="hover:text-[#e0bd40]">{t("pricing_title")}</a>
             <a href="#about" className="hover:text-[#e0bd40]">{t("about_title")}</a>
             <a href="/contact" className="hover:text-[#e0bd40]">{t("contact_title")}</a>
-            <a href="/auth" className="hover:text-[#e0bd40]">{t("auth_login")}</a>
           </nav>
+          {/* Login Buttons */}
+          <div className="flex items-center space-x-3">
+            <a 
+              href="https://app.ahauros.io/login" 
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg"
+            >
+              User Login
+            </a>
+            <a 
+              href="https://admin.ahauros.io/health" 
+              className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg"
+            >
+              Admin API
+            </a>
+          </div>
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
             defaultValue={i18n.language}
@@ -65,21 +91,68 @@ export default function LandingPage() {
         </div>
         {/* Mobile menu button */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 -mr-2"
+            aria-label="Toggle mobile menu"
+          >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              {menuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
+        {/* Mobile menu overlay */}
+        {menuOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            onClick={() => setMenuOpen(false)}
+            onTouchEnd={() => setMenuOpen(false)}
+          />
+        )}
         {/* Mobile menu items */}
         {menuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-black/90 flex flex-col items-center space-y-4 py-6 md:hidden">
-            <a href="#problems" onClick={() => setMenuOpen(false)}>{t("problems_title")}</a>
-            <a href="#features" onClick={() => setMenuOpen(false)}>{t("features_title")}</a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)}>{t("pricing_title")}</a>
-            <a href="#about" onClick={() => setMenuOpen(false)}>{t("about_title")}</a>
-            <a href="/contact" onClick={() => setMenuOpen(false)}>{t("contact_title")}</a>
-            <a href="/auth" onClick={() => setMenuOpen(false)}>{t("auth_login")}</a>
+          <div className="absolute top-16 left-0 w-full bg-black/95 backdrop-blur-sm flex flex-col items-center space-y-4 py-6 md:hidden z-50 animate-in slide-in-from-top-2 duration-300">
+            {/* Close button */}
+            <button 
+              onClick={() => setMenuOpen(false)}
+              onTouchEnd={() => setMenuOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-[#e0bd40] transition-colors p-2 -mr-2"
+              aria-label="Close mobile menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <a href="#problems" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("problems_title")}</a>
+            <a href="#features" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("features_title")}</a>
+            <a href="#pricing" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("pricing_title")}</a>
+            <a href="#about" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("about_title")}</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} onTouchEnd={() => setMenuOpen(false)} className="text-white hover:text-[#e0bd40] transition-colors py-2 px-4 rounded-lg hover:bg-white/10">{t("contact_title")}</a>
+            
+            {/* Mobile Login Buttons */}
+            <div className="flex flex-col space-y-3 pt-4">
+              <a 
+                href="https://app.ahauros.io/login" 
+                onClick={() => setMenuOpen(false)}
+                onTouchEnd={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center active:scale-95"
+              >
+                User Login
+              </a>
+              <a 
+                href="https://admin.ahauros.io/health" 
+                onClick={() => setMenuOpen(false)}
+                onTouchEnd={() => setMenuOpen(false)}
+                className="bg-gradient-to-r from-[#e0bd40] to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-lg text-center active:scale-95"
+              >
+                Admin API
+              </a>
+            </div>
+            
             <div className="pt-4">
               <select
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -110,10 +183,10 @@ export default function LandingPage() {
             {t("hero_sub")}
           </p>
           <a
-            href="/auth?mode=signup"
+            href="https://app.ahauros.io/login"
             className="bg-[#e0bd40] text-black font-semibold px-8 py-4 rounded-xl shadow-lg text-lg hover:bg-yellow-400 transition whitespace-nowrap"
           >
-            {t("cta_trial")}
+            Start Now → User Dashboard
           </a>
         </div>
       </section>
@@ -218,8 +291,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €199 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
@@ -230,8 +303,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €699 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
@@ -242,8 +315,8 @@ export default function LandingPage() {
             <p className="text-4xl font-bold mb-6 text-[#e0bd40]">
               €1499 <span className="text-lg text-gray-400">{t("pricing.price_month")}</span>
             </p>
-            <a href="/auth?mode=signup" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-              {t("pricing.start_trial")}
+            <a href="https://app.ahauros.io/login" className="mt-auto bg-[#e0bd40] text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition">
+              Start Trial
             </a>
           </div>
 
@@ -271,19 +344,19 @@ export default function LandingPage() {
             <div>
               <h3 className="text-base md:text-lg font-semibold mb-4 text-[#e0bd40]">{t("quick_links")}</h3>
               <ul className="space-y-2">
-                <li><a href="#problems" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("problems")}</a></li>
-                <li><a href="#features" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("features")}</a></li>
-                <li><a href="#pricing" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("pricing_nav")}</a></li>
-                <li><a href="#about" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("about")}</a></li>
-                <li><a href="/contact" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("contact")}</a></li>
+                <li><a href="#problems" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("problems")}</a></li>
+                <li><a href="#features" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("features")}</a></li>
+                <li><a href="#pricing" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("pricing_nav")}</a></li>
+                <li><a href="#about" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("about")}</a></li>
+                <li><a href="/contact" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("contact")}</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-base md:text-lg font-semibold mb-4 text-[#e0bd40]">{t("legal")}</h3>
               <ul className="space-y-2">
-                <li><a href="/terms" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("terms_conditions")}</a></li>
-                <li><a href="/privacy" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("privacy_policy")}</a></li>
-                <li><a href="/gdpr" className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("gdpr")}</a></li>
+                <li><a href="/terms" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("terms_conditions")}</a></li>
+                <li><a href="/privacy" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("privacy_policy")}</a></li>
+                <li><a href="/gdpr" onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-[#e0bd40] transition text-sm md:text-base">{t("gdpr")}</a></li>
               </ul>
             </div>
           </div>

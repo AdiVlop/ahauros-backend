@@ -1,0 +1,36 @@
+{
+  "family": "ahauros-ai-prod-dashboard",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::344707020061:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::344707020061:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "dashboard",
+      "image": "nginx:alpine",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NGINX_PORT",
+          "value": "80"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ahauros-dashboard",
+          "awslogs-region": "eu-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
