@@ -10,17 +10,32 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 
-// Middleware
-app.use(cors({ origin: "*", credentials: true }));
+// Middleware - CORS configurat pentru domeniile Ahauros
+app.use(cors({ 
+  origin: [
+    "https://app.ahauros.io",
+    "https://ahauros.io", 
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:5173"
+  ], 
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-dashboard-role", "Origin", "X-Requested-With", "Accept"],
+  preflightContinue: false,
+  optionsSuccessStatus: 200
+}));
+
 app.use(express.json());
 
 // Reverse proxy pentru Andreea Service
-const andreeaServiceUrl = process.env.ANDREEA_SERVICE_URL || "http://andreea-service:3002";
+const andreeaServiceUrl = process.env.ANDREEA_SERVICE_URL || "http://localhost:8001";
 app.use(
   "/andreea/gpt",
   createProxyMiddleware({
     target: andreeaServiceUrl,
     changeOrigin: true,
+    pathRewrite: { "^/andreea": "" },
     timeout: 10000,
     logLevel: "debug",
     onError: (err, req, res) => {
