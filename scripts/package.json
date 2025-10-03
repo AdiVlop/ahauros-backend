@@ -1,0 +1,12 @@
+{
+  "name": "ahauros-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Scripts for Ahauros project management",
+  "main": "export-secrets.js",
+  "scripts": {
+    "export-secrets": "node export-secrets.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
