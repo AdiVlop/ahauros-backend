@@ -9,7 +9,8 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3001,
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+        ANDREEA_SERVICE_URL: process.env.ANDREEA_SERVICE_URL
       }
     }
   ]

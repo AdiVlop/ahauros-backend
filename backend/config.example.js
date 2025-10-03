@@ -20,6 +20,9 @@ export const config = {
   // OpenAI API Key for Andreea GPT
   OPENAI_API_KEY: "your-openai-api-key-here",
   
+  // Andreea Service URL (for reverse proxy)
+  ANDREEA_SERVICE_URL: "http://andreea-service:3002",
+  
   // Environment
   NODE_ENV: "development"
 };
@@ -30,4 +33,5 @@ export const config = {
 // 3. Update with your actual MongoDB URI, email credentials, etc.
 // 4. Make sure to use Gmail App Password for EMAIL_PASS
 // 5. Get your OpenAI API key from https://platform.openai.com/api-keys
+// 6. ANDREEA_SERVICE_URL is used for reverse proxy to Andreea Service
 

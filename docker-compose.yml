@@ -1,54 +1,29 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: ahauros-postgres
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
     environment:
-      POSTGRES_DB: ahauros
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret123
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./data-layer/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - NODE_ENV=production
+      - PORT=3001
+      - ANDREEA_SERVICE_URL=http://andreea-service:3002
+    depends_on:
+      - andreea-service
     networks:
       - ahauros-network
-    restart: unless-stopped
 
-  redis:
-    image: redis:7-alpine
-    container_name: ahauros-redis
+  andreea-service:
+    build: ./andreea-service
     ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - ahauros-network
-    restart: unless-stopped
-    command: redis-server --appendonly yes
-
-  clickhouse:
-    image: clickhouse/clickhouse-server:latest
-    container_name: ahauros-clickhouse
+      - "3002:3002"
     environment:
-      CLICKHOUSE_DB: ahauros_analytics
-      CLICKHOUSE_USER: admin
-      CLICKHOUSE_PASSWORD: secret123
-    ports:
-      - "8123:8123"  # HTTP interface
-      - "9000:9000"  # Native interface
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
+      - NODE_ENV=production
+      - PORT=3002
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     networks:
       - ahauros-network
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-  redis_data:
-  clickhouse_data:
 
 networks:
   ahauros-network:

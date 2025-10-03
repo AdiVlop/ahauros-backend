@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
+import { createProxyMiddleware } from "http-proxy-middleware";
 import authRoutes from "./routes/auth.js";
 
 dotenv.config();
@@ -11,6 +12,22 @@ const app = express();
 // Middleware
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
+
+// Reverse proxy pentru Andreea Service
+const andreeaServiceUrl = process.env.ANDREEA_SERVICE_URL || "http://andreea-service:3002";
+app.use(
+  "/andreea/gpt",
+  createProxyMiddleware({
+    target: andreeaServiceUrl,
+    changeOrigin: true,
+    timeout: 10000,
+    logLevel: "debug",
+    onError: (err, req, res) => {
+      console.error("Proxy error:", err.message);
+      res.status(500).json({ error: "Andreea Service unavailable" });
+    }
+  })
+);
 
 // MongoDB connection (optional for testing)
 if (process.env.MONGO_URI) {
@@ -83,60 +100,8 @@ app.get("/supplier-optimizer/stock-suppliers", (req, res) => {
 });
 
 // =================== Andreea GPT API ===================
-app.post("/andreea/gpt", async (req, res) => {
-  try {
-    const { prompt, language = "English" } = req.body;
-
-    // Validare prompt
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
-    }
-
-    // Verificare API key
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ error: "OpenAI API key not configured" });
-    }
-
-    // Request către OpenAI API
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: `You are Andreea, the Ahauros AI mentor. Always reply strictly in ${language}, regardless of the input language.`
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        max_tokens: 500,
-        temperature: 0.7
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
-    // Returnează răspunsul GPT
-    res.json({ 
-      reply: response.data.choices[0].message.content 
-    });
-
-  } catch (error) {
-    console.error("GPT API Error:", error.response?.data || error.message);
-    
-    // Returnează eroare generică pentru client
-    res.status(500).json({ 
-      error: "Failed to get response from AI assistant" 
-    });
-  }
-});
+// Ruta /andreea/gpt este acum proxy-uită către Andreea Service
+// Configurarea proxy-ului este în middleware-urile de mai sus
 
 // Error handling middleware
 app.use((err, req, res, next) => {
