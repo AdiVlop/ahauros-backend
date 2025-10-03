@@ -3,20 +3,27 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import User from "../models/User.js";
+// import User from "../models/User.js"; // Disabled - no MongoDB
 
 const router = express.Router();
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST || "smtp.gmail.com",
+  port: process.env.SMTP_PORT || 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
 });
 
-// SIGNUP endpoint
+// SIGNUP endpoint - DISABLED (no MongoDB)
+router.post("/signup", async (req, res) => {
+  res.status(503).json({ error: "Authentication service temporarily unavailable" });
+});
+
+/* DISABLED - MongoDB dependency
 router.post("/signup", async (req, res) => {
   try {
     const { company, regNumber, name, email, phone, password } = req.body;
@@ -344,5 +351,6 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).json({ error: "Reset failed" });
   }
 });
+*/
 
 export default router;

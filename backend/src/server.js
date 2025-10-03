@@ -1,8 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import axios from "axios";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import authRoutes from "./routes/auth.js";
 import adminRoutes from "./routes/admin.js";
@@ -10,23 +9,28 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 
-// Middleware - CORS configurat pentru domeniile Ahauros
-app.use(cors({ 
-  origin: [
-    "https://app.ahauros.io",
-    "https://ahauros.io", 
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:5173"
-  ], 
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "x-dashboard-role", "Origin", "X-Requested-With", "Accept"],
-  preflightContinue: false,
-  optionsSuccessStatus: 200
+// ✅ configurăm CORS corect
+const allowedOrigins = [
+  "https://app.ahauros.io",
+  "https://admin.ahauros.io",
+  "http://localhost:3002", // test local
+  "http://localhost:3003"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked: " + origin));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-dashboard-role"],
+  credentials: true
 }));
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 // Reverse proxy pentru Andreea Service
 const andreeaServiceUrl = process.env.ANDREEA_SERVICE_URL || "http://localhost:8001";
@@ -116,28 +120,12 @@ app.use(
   })
 );
 
-// MongoDB connection (optional for testing)
-if (process.env.MONGO_URI) {
-  mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ MongoDB connected successfully"))
-    .catch(err => console.error("❌ MongoDB connection error:", err));
-} else {
-  console.log("⚠️ MongoDB not configured - running without database");
-}
-
 // Routes
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 
-// Health check endpoint
-app.get("/", (req, res) => {
-  res.json({ message: "Ahauros AI Backend API is running!" });
-});
-
-// Health-check endpoint
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", timestamp: Date.now() });
-});
+// ✅ health check
+app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 // Admin routes info endpoint
 app.get("/admin/info", (req, res) => {
@@ -213,9 +201,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Something went wrong!" });
 });
 
+// ✅ PORT din ENV
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
-  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
+  console.log(`📧 Email service: ${process.env.SMTP_HOST ? "Configured" : "Not configured"}`);
+  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || "Not set"}`);
 });
