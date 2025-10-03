@@ -1,2 +1,3 @@
-stripe_price_enterprise = "price_1S83TbQbMbo4QVSdBBfIxY8R"
-
+aws_region   = "eu-west-1"
+environment  = "prod"
+domain_name  = "ahauros.io"

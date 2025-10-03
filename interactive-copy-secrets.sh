@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🔐 Copying secrets to PayAiX organization..."
+echo "🔐 Interactive secrets copy to PayAiX organization..."
 echo "⚠️  You will be prompted for each secret value."
 echo ""
 

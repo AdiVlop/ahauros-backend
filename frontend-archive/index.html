@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahauros AI - Dashboard</title>
+    <meta name="description" content="Ahauros AI - Advanced AI Services Dashboard" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+    
+    <!-- React and ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Ahauros Branding CSS -->
+    <link rel="stylesheet" href="src/styles/ahauros-branding.css">
+    
+    <!-- Global styles -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .app {
+            min-height: 100vh;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Dashboard styles */
+        .dashboard {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .dashboard-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .dashboard-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-content {
+            display: flex;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .dashboard-sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        
+        .tab-icon {
+            font-size: 1.2rem;
+        }
+        
+        .dashboard-main {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .tab-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+        
+        .tab-content h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Billing styles */
+        .billing-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .billing-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.8;
+        }
+        
+        /* Subscription Status */
+        .subscription-status {
+            margin-bottom: 2rem;
+        }
+        
+        .subscription-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .subscription-header h4 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .no-subscription {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #d1d5db;
+        }
+        
+        .no-subscription h4 {
+            margin: 0 0 1rem 0;
+            color: #374151;
+            font-size: 1.25rem;
+        }
+        
+        .no-subscription p {
+            margin: 0.5rem 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        /* Subscription Plans */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .plan-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .plan-card.featured {
+            border: 2px solid #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .plan-currency {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .plan-interval {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+        
+        .plan-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .subscribe-button {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+        }
+        
+        /* Reports Placeholder */
+        .reports-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(224, 189, 64, 0.3);
+        }
+        
+        .reports-header h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+            color: #e0bd40;
+        }
+        
+        .reports-header p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+        
+        .reports-placeholder {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(224, 189, 64, 0.2);
+        }
+        
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .reports-placeholder h4 {
+            color: #e0bd40;
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .reports-placeholder p {
+            margin: 0.5rem 0;
+            opacity: 0.8;
+        }
+        
+        .subscribe-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading Ahauros AI Dashboard...
+        </div>
+    </div>
+    
+    <!-- Simple React App -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Simple Dashboard Component
+        const Dashboard = () => {
+            const [activeTab, setActiveTab] = useState('overview');
+            
+            const tabs = [
+                { id: 'overview', label: 'Overview', icon: '📊' },
+                { id: 'billing', label: 'Billing', icon: '💳' },
+                { id: 'reports', label: 'Reports', icon: '📋' },
+                { id: 'usage', label: 'Usage', icon: '📈' },
+                { id: 'settings', label: 'Settings', icon: '⚙️' }
+            ];
+            
+            const renderTabContent = () => {
+                switch (activeTab) {
+                    case 'overview':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Welcome to Ahauros AI Dashboard'),
+                            React.createElement('p', null, 'Your AI services are running smoothly!'),
+                            React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' } },
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'API Requests'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '12,345'),
+                                    React.createElement('p', null, 'This month')
+                                ),
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'Response Time'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '245ms'),
+                                    React.createElement('p', null, 'Average')
+                                ),
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'Success Rate'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '99.9%'),
+                                    React.createElement('p', null, 'Last 30 days')
+                                )
+                            )
+                        );
+                    
+                    case 'billing':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('div', { className: 'billing-header' },
+                                React.createElement('h3', null, 'Subscription & Billing'),
+                                React.createElement('p', null, 'Manage your Ahauros AI subscription and billing preferences')
+                            ),
+                            React.createElement('div', { className: 'subscription-status' },
+                                React.createElement('div', { className: 'no-subscription' },
+                                    React.createElement('h4', null, '📋 No Active Subscription'),
+                                    React.createElement('p', null, 'You don\'t have an active subscription yet.'),
+                                    React.createElement('p', null, 'Choose a plan below to get started with Ahauros AI!')
+                                )
+                            ),
+                            React.createElement('div', { className: 'plans-grid' },
+                                React.createElement('div', { className: 'plan-card' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Starter Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '199€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'Basic AI features'),
+                                        React.createElement('li', null, '10,000 requests/month'),
+                                        React.createElement('li', null, 'Email support')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Starter Plan!')
+                                    }, 'Subscribe Now')
+                                ),
+                                React.createElement('div', { className: 'plan-card featured' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Growth Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '699€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'Advanced AI features'),
+                                        React.createElement('li', null, '100,000 requests/month'),
+                                        React.createElement('li', null, 'Priority support'),
+                                        React.createElement('li', null, 'API access')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Growth Plan!')
+                                    }, 'Subscribe Now')
+                                ),
+                                React.createElement('div', { className: 'plan-card' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Enterprise Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '1499€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'All AI features'),
+                                        React.createElement('li', null, 'Unlimited requests'),
+                                        React.createElement('li', null, '24/7 support'),
+                                        React.createElement('li', null, 'Custom integrations'),
+                                        React.createElement('li', null, 'SLA')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Enterprise Plan!')
+                                    }, 'Subscribe Now')
+                                )
+                            )
+                        );
+                    
+                    case 'reports':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('div', { className: 'reports-header' },
+                                React.createElement('h3', null, '📊 Reports & Analytics'),
+                                React.createElement('p', null, 'Monitor your subscription performance and customer insights')
+                            ),
+                            React.createElement('div', { className: 'reports-placeholder' },
+                                React.createElement('div', { className: 'placeholder-icon' }, '📋'),
+                                React.createElement('h4', null, 'Reports Coming Soon'),
+                                React.createElement('p', null, 'Advanced analytics and reporting features will be available here.'),
+                                React.createElement('p', null, 'Track subscription metrics, revenue analytics, and customer insights.')
+                            )
+                        );
+                    
+                    case 'usage':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Usage Analytics'),
+                            React.createElement('p', null, '📊 Usage analytics and detailed metrics will be available here.'),
+                            React.createElement('p', null, 'Track your API usage, response times, and performance metrics.')
+                        );
+                    
+                    case 'settings':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Account Settings'),
+                            React.createElement('p', null, '⚙️ Account settings and preferences will be available here.'),
+                            React.createElement('p', null, 'Manage your profile, API keys, and notification preferences.')
+                        );
+                    
+                    default:
+                        return null;
+                }
+            };
+            
+            return React.createElement('div', { className: 'dashboard' },
+                React.createElement('div', { className: 'dashboard-header' },
+                    React.createElement('div', { className: 'ahauros-logo' },
+                        React.createElement('div', { className: 'ahauros-logo-icon' }, '🤖'),
+                        React.createElement('div', { className: 'ahauros-logo-text' }, 'Ahauros AI')
+                    ),
+                    React.createElement('h1', null, 'Dashboard'),
+                    React.createElement('p', null, 'Welcome back! Here\'s what\'s happening with your AI services.')
+                ),
+                React.createElement('div', { className: 'dashboard-content' },
+                    React.createElement('div', { className: 'dashboard-sidebar' },
+                        React.createElement('nav', { className: 'dashboard-nav' },
+                            tabs.map(tab => 
+                                React.createElement('button', {
+                                    key: tab.id,
+                                    className: `nav-tab ${activeTab === tab.id ? 'active' : ''}`,
+                                    onClick: () => setActiveTab(tab.id)
+                                },
+                                    React.createElement('span', { className: 'tab-icon' }, tab.icon),
+                                    React.createElement('span', { className: 'tab-label' }, tab.label)
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'dashboard-main' },
+                        renderTabContent()
+                    )
+                )
+            );
+        };
+        
+        // Main App Component
+        const App = () => {
+            return React.createElement('div', { className: 'app' },
+                React.createElement(Dashboard)
+            );
+        };
+        
+        // Render the app
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahauros AI - Dashboard</title>
+    <meta name="description" content="Ahauros AI - Advanced AI Services Dashboard" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+    
+    <!-- React and ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Ahauros Branding CSS -->
+    <link rel="stylesheet" href="src/styles/ahauros-branding.css">
+    
+    <!-- Global styles -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .app {
+            min-height: 100vh;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Dashboard styles */
+        .dashboard {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .dashboard-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .dashboard-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-content {
+            display: flex;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .dashboard-sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        
+        .tab-icon {
+            font-size: 1.2rem;
+        }
+        
+        .dashboard-main {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .tab-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+        
+        .tab-content h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Billing styles */
+        .billing-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .billing-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.8;
+        }
+        
+        /* Subscription Status */
+        .subscription-status {
+            margin-bottom: 2rem;
+        }
+        
+        .subscription-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .subscription-header h4 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .no-subscription {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #d1d5db;
+        }
+        
+        .no-subscription h4 {
+            margin: 0 0 1rem 0;
+            color: #374151;
+            font-size: 1.25rem;
+        }
+        
+        .no-subscription p {
+            margin: 0.5rem 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        /* Subscription Plans */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .plan-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .plan-card.featured {
+            border: 2px solid #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .plan-currency {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .plan-interval {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+        
+        .plan-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .subscribe-button {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+        }
+        
+        /* Reports Placeholder */
+        .reports-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(224, 189, 64, 0.3);
+        }
+        
+        .reports-header h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+            color: #e0bd40;
+        }
+        
+        .reports-header p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+        
+        .reports-placeholder {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(224, 189, 64, 0.2);
+        }
+        
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .reports-placeholder h4 {
+            color: #e0bd40;
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .reports-placeholder p {
+            margin: 0.5rem 0;
+            opacity: 0.8;
+        }
+        
+        .subscribe-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading Ahauros AI Dashboard...
+        </div>
+    </div>
+    
+    <!-- Simple React App -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Simple Dashboard Component
+        const Dashboard = () => {
+            const [activeTab, setActiveTab] = useState('overview');
+            
+            const tabs = [
+                { id: 'overview', label: 'Overview', icon: '📊' },
+                { id: 'billing', label: 'Billing', icon: '💳' },
+                { id: 'reports', label: 'Reports', icon: '📋' },
+                { id: 'usage', label: 'Usage', icon: '📈' },
+                { id: 'settings', label: 'Settings', icon: '⚙️' }
+            ];
+            
+            const renderTabContent = () => {
+                switch (activeTab) {
+                    case 'overview':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Welcome to Ahauros AI Dashboard'),
+                            React.createElement('p', null, 'Your AI services are running smoothly!'),
+                            React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' } },
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'API Requests'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '12,345'),
+                                    React.createElement('p', null, 'This month')
+                                ),
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'Response Time'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '245ms'),
+                                    React.createElement('p', null, 'Average')
+                                ),
+                                React.createElement('div', { style: { background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' } },
+                                    React.createElement('h4', null, 'Success Rate'),
+                                    React.createElement('div', { style: { fontSize: '2rem', fontWeight: 'bold' } }, '99.9%'),
+                                    React.createElement('p', null, 'Last 30 days')
+                                )
+                            )
+                        );
+                    
+                    case 'billing':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('div', { className: 'billing-header' },
+                                React.createElement('h3', null, 'Subscription & Billing'),
+                                React.createElement('p', null, 'Manage your Ahauros AI subscription and billing preferences')
+                            ),
+                            React.createElement('div', { className: 'subscription-status' },
+                                React.createElement('div', { className: 'no-subscription' },
+                                    React.createElement('h4', null, '📋 No Active Subscription'),
+                                    React.createElement('p', null, 'You don\'t have an active subscription yet.'),
+                                    React.createElement('p', null, 'Choose a plan below to get started with Ahauros AI!')
+                                )
+                            ),
+                            React.createElement('div', { className: 'plans-grid' },
+                                React.createElement('div', { className: 'plan-card' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Starter Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '199€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'Basic AI features'),
+                                        React.createElement('li', null, '10,000 requests/month'),
+                                        React.createElement('li', null, 'Email support')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Starter Plan!')
+                                    }, 'Subscribe Now')
+                                ),
+                                React.createElement('div', { className: 'plan-card featured' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Growth Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '699€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'Advanced AI features'),
+                                        React.createElement('li', null, '100,000 requests/month'),
+                                        React.createElement('li', null, 'Priority support'),
+                                        React.createElement('li', null, 'API access')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Growth Plan!')
+                                    }, 'Subscribe Now')
+                                ),
+                                React.createElement('div', { className: 'plan-card' },
+                                    React.createElement('h3', { className: 'plan-name' }, 'Enterprise Plan'),
+                                    React.createElement('div', { className: 'plan-price' }, '1499€'),
+                                    React.createElement('div', { className: 'plan-interval' }, 'per month'),
+                                    React.createElement('ul', { className: 'plan-features' },
+                                        React.createElement('li', null, 'All AI features'),
+                                        React.createElement('li', null, 'Unlimited requests'),
+                                        React.createElement('li', null, '24/7 support'),
+                                        React.createElement('li', null, 'Custom integrations'),
+                                        React.createElement('li', null, 'SLA')
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'subscribe-button',
+                                        onClick: () => alert('Subscribe to Enterprise Plan!')
+                                    }, 'Subscribe Now')
+                                )
+                            )
+                        );
+                    
+                    case 'reports':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('div', { className: 'reports-header' },
+                                React.createElement('h3', null, '📊 Reports & Analytics'),
+                                React.createElement('p', null, 'Monitor your subscription performance and customer insights')
+                            ),
+                            React.createElement('div', { className: 'reports-placeholder' },
+                                React.createElement('div', { className: 'placeholder-icon' }, '📋'),
+                                React.createElement('h4', null, 'Reports Coming Soon'),
+                                React.createElement('p', null, 'Advanced analytics and reporting features will be available here.'),
+                                React.createElement('p', null, 'Track subscription metrics, revenue analytics, and customer insights.')
+                            )
+                        );
+                    
+                    case 'usage':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Usage Analytics'),
+                            React.createElement('p', null, '📊 Usage analytics and detailed metrics will be available here.'),
+                            React.createElement('p', null, 'Track your API usage, response times, and performance metrics.')
+                        );
+                    
+                    case 'settings':
+                        return React.createElement('div', { className: 'tab-content' },
+                            React.createElement('h3', null, 'Account Settings'),
+                            React.createElement('p', null, '⚙️ Account settings and preferences will be available here.'),
+                            React.createElement('p', null, 'Manage your profile, API keys, and notification preferences.')
+                        );
+                    
+                    default:
+                        return null;
+                }
+            };
+            
+            return React.createElement('div', { className: 'dashboard' },
+                React.createElement('div', { className: 'dashboard-header' },
+                    React.createElement('div', { className: 'ahauros-logo' },
+                        React.createElement('div', { className: 'ahauros-logo-icon' }, '🤖'),
+                        React.createElement('div', { className: 'ahauros-logo-text' }, 'Ahauros AI')
+                    ),
+                    React.createElement('h1', null, 'Dashboard'),
+                    React.createElement('p', null, 'Welcome back! Here\'s what\'s happening with your AI services.')
+                ),
+                React.createElement('div', { className: 'dashboard-content' },
+                    React.createElement('div', { className: 'dashboard-sidebar' },
+                        React.createElement('nav', { className: 'dashboard-nav' },
+                            tabs.map(tab => 
+                                React.createElement('button', {
+                                    key: tab.id,
+                                    className: `nav-tab ${activeTab === tab.id ? 'active' : ''}`,
+                                    onClick: () => setActiveTab(tab.id)
+                                },
+                                    React.createElement('span', { className: 'tab-icon' }, tab.icon),
+                                    React.createElement('span', { className: 'tab-label' }, tab.label)
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'dashboard-main' },
+                        renderTabContent()
+                    )
+                )
+            );
+        };
+        
+        // Main App Component
+        const App = () => {
+            return React.createElement('div', { className: 'app' },
+                React.createElement(Dashboard)
+            );
+        };
+        
+        // Render the app
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
