@@ -29,6 +29,77 @@ app.use(
   })
 );
 
+// Proxy routing pentru agenții interni AI
+app.use(
+  "/ads",
+  createProxyMiddleware({
+    target: process.env.ADS_SERVICE_URL || "http://ads-service:3005",
+    changeOrigin: true,
+    pathRewrite: { "^/ads": "" },
+    timeout: 10000,
+    onError: (err, req, res) => {
+      console.error("Ads Service proxy error:", err.message);
+      res.status(500).json({ error: "Ads Service unavailable" });
+    }
+  })
+);
+
+app.use(
+  "/fraud",
+  createProxyMiddleware({
+    target: process.env.FRAUD_SERVICE_URL || "http://fraud-service:3006",
+    changeOrigin: true,
+    pathRewrite: { "^/fraud": "" },
+    timeout: 10000,
+    onError: (err, req, res) => {
+      console.error("Fraud Service proxy error:", err.message);
+      res.status(500).json({ error: "Fraud Service unavailable" });
+    }
+  })
+);
+
+app.use(
+  "/courier",
+  createProxyMiddleware({
+    target: process.env.COURIER_SERVICE_URL || "http://courier-service:3007",
+    changeOrigin: true,
+    pathRewrite: { "^/courier": "" },
+    timeout: 10000,
+    onError: (err, req, res) => {
+      console.error("Courier Service proxy error:", err.message);
+      res.status(500).json({ error: "Courier Service unavailable" });
+    }
+  })
+);
+
+app.use(
+  "/neuromarketing",
+  createProxyMiddleware({
+    target: process.env.NEUROMARKETING_SERVICE_URL || "http://neuromarketing-service:3008",
+    changeOrigin: true,
+    pathRewrite: { "^/neuromarketing": "" },
+    timeout: 10000,
+    onError: (err, req, res) => {
+      console.error("Neuromarketing Service proxy error:", err.message);
+      res.status(500).json({ error: "Neuromarketing Service unavailable" });
+    }
+  })
+);
+
+app.use(
+  "/supplier",
+  createProxyMiddleware({
+    target: process.env.SUPPLIER_SERVICE_URL || "http://supplier-service:3009",
+    changeOrigin: true,
+    pathRewrite: { "^/supplier": "" },
+    timeout: 10000,
+    onError: (err, req, res) => {
+      console.error("Supplier Service proxy error:", err.message);
+      res.status(500).json({ error: "Supplier Service unavailable" });
+    }
+  })
+);
+
 // MongoDB connection (optional for testing)
 if (process.env.MONGO_URI) {
   mongoose.connect(process.env.MONGO_URI)

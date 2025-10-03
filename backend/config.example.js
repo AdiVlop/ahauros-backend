@@ -23,6 +23,13 @@ export const config = {
   // Andreea Service URL (for reverse proxy)
   ANDREEA_SERVICE_URL: "http://andreea-service:3002",
   
+  // AI Agents Service URLs (for reverse proxy)
+  ADS_SERVICE_URL: "http://ads-service:3005",
+  FRAUD_SERVICE_URL: "http://fraud-service:3006",
+  COURIER_SERVICE_URL: "http://courier-service:3007",
+  NEUROMARKETING_SERVICE_URL: "http://neuromarketing-service:3008",
+  SUPPLIER_SERVICE_URL: "http://supplier-service:3009",
+  
   // Environment
   NODE_ENV: "development"
 };
@@ -34,4 +41,6 @@ export const config = {
 // 4. Make sure to use Gmail App Password for EMAIL_PASS
 // 5. Get your OpenAI API key from https://platform.openai.com/api-keys
 // 6. ANDREEA_SERVICE_URL is used for reverse proxy to Andreea Service
+// 7. AI Agents Service URLs are used for reverse proxy to internal AI agents
+// 8. Update service URLs based on your Docker/ECS deployment configuration
 

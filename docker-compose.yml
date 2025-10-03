@@ -9,6 +9,11 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - ANDREEA_SERVICE_URL=http://andreea-service:3002
+      - ADS_SERVICE_URL=http://ads-service:3005
+      - FRAUD_SERVICE_URL=http://fraud-service:3006
+      - COURIER_SERVICE_URL=http://courier-service:3007
+      - NEUROMARKETING_SERVICE_URL=http://neuromarketing-service:3008
+      - SUPPLIER_SERVICE_URL=http://supplier-service:3009
     depends_on:
       - andreea-service
     networks:
