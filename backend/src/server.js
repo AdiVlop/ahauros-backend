@@ -1,12 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import authRoutes from "./routes/auth.js";
 import adminRoutes from "./routes/admin.js";
-
-dotenv.config();
+import andreeaRoutes from "./routes/andreea.js";
 const app = express();
 
 // ✅ configurăm CORS global
@@ -32,22 +33,8 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-// Reverse proxy pentru Andreea Service
-const andreeaServiceUrl = process.env.ANDREEA_SERVICE_URL || "http://localhost:8001";
-app.use(
-  "/andreea/gpt",
-  createProxyMiddleware({
-    target: andreeaServiceUrl,
-    changeOrigin: true,
-    pathRewrite: { "^/andreea": "" },
-    timeout: 10000,
-    logLevel: "debug",
-    onError: (err, req, res) => {
-      console.error("Proxy error:", err.message);
-      res.status(500).json({ error: "Andreea Service unavailable" });
-    }
-  })
-);
+// ✅ montează ruta Andreea
+app.use("/andreea", andreeaRoutes);
 
 // Proxy routing pentru agenții interni AI
 app.use(
@@ -126,6 +113,12 @@ app.use("/admin", adminRoutes);
 
 // health
 app.get("/health", (req, res) => res.json({ status: "ok" }));
+
+// debug endpoint
+app.get("/debug", (req, res) => res.json({ 
+  openaiKey: !!process.env.OPENAI_API_KEY,
+  keyLength: process.env.OPENAI_API_KEY?.length || 0
+}));
 
 // Admin routes info endpoint
 app.get("/admin/info", (req, res) => {
