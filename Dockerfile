@@ -5,7 +5,7 @@ FROM node:18-alpine AS node-base
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY backend/package*.json ./
 
 # Install Node.js dependencies
 RUN npm ci --only=production && npm cache clean --force
@@ -52,7 +52,7 @@ COPY --from=python-base /usr/local/lib/python3.11/site-packages /usr/local/lib/p
 COPY --from=python-base /usr/local/bin /usr/local/bin
 
 # Copy application code
-COPY . .
+COPY backend/ .
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
@@ -63,12 +63,12 @@ RUN chown -R ahauros:nodejs /app
 USER ahauros
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node scripts/health-check.js
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npx", "pm2-runtime", "src/server.js"]
 
