@@ -15,7 +15,7 @@ export const config = {
   FRONTEND_URL: "http://localhost:5173",
   
   // Server Port
-  PORT: 5000,
+  PORT: 3001,
   
   // OpenAI API Key for Andreea GPT
   OPENAI_API_KEY: "your-openai-api-key-here",
