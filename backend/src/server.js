@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import axios from "axios";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import authRoutes from "./routes/auth.js";
+import adminRoutes from "./routes/admin.js";
 
 dotenv.config();
 const app = express();
@@ -111,6 +112,7 @@ if (process.env.MONGO_URI) {
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -120,6 +122,22 @@ app.get("/", (req, res) => {
 // Health-check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: Date.now() });
+});
+
+// Admin routes info endpoint
+app.get("/admin/info", (req, res) => {
+  res.json({
+    message: "Ahauros Admin AI Routes",
+    endpoints: {
+      "POST /admin/ai/andreea/train": "Train an AI agent through Andreea",
+      "GET /admin/ai/andreea/reports": "Get Andreea training reports",
+      "GET /admin/ai/:agent/health": "Get agent health status",
+      "GET /admin/ai/:agent/metrics": "Get agent performance metrics",
+      "GET /admin/ai/agents": "Get list of all available agents"
+    },
+    validAgents: ["ads", "fraud", "courier", "neuromarketing", "supplier", "pricing", "forecast", "profit"],
+    authentication: "Requires x-dashboard-role: admin header"
+  });
 });
 
 // =================== Profit API ===================
